@@ -1,0 +1,26 @@
+{
+  "name": "raritan-nodes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "node-red" : {
+    "nodes": {
+        "get-outlet-sensor": "get-outlet-sensor.js",
+        "get-sensor-inlet": "get-sensor-inlet.js",
+        "get-sensor-pole": "get-sensor-pole.js",
+        "set-outlet": "set-outlet.js",
+        "get-ocp-sensor": "get-ocp-sensor.js",
+        "get-peripheral-sensor": "get-peripheral-sensor.js",
+        "settings":"settings.js",
+        "config-node":"config-node.js"
+    }
+  },
+  "dependencies": {
+    "raritan_node_rpc": "file:../install_node_noversion"
+  }
+}

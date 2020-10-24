@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <title>Bank Accounts - Money Manager</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="/static/img/logo.png" th:href="@{/static/img/logo.png}"/>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" th:href="@{/static/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="/static/css/fontawsome-all.min.css" th:href="@{/static/css/fontawsome-all.min.css}"/>
+    <link rel="stylesheet" href="/static/css/main.css" th:href="@{/static/css/main.css}"/>
+    <script type="application/javascript" src="/static/js/bootstrap.min.js"
+            th:src="@{/static/js/bootstrap.min.js}"></script>
+</head>
+
+<body>
+<div th:replace="navbar :: navbar"></div>
+<div class="container">
+    <h2 class="text-left text-light ">Bank Accounts</h2>
+    <div class="row">
+        <a role="button" href="/accounts/create"
+           class="ml-auto btn btn-primary btn-lg bg-transparent new-btn-ui text-color-orange"> Add new bank
+            account</a>
+    </div>
+    <div th:if="${not #lists.isEmpty(accounts)}">
+        <table class="table table-striped table-dark table-hover">
+            <thead>
+            <tr>
+                <th class="text-light" scope="col">Bank account name</th>
+                <th class="text-light" scope="col">IBAN</th>
+                <th class="text-light" scope="col">Users of the bank account</th>
+                <th class="text-light" scope="col">Balance</th>
+                <th class="text-light" scope="col">Edit</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="account : ${accounts}">
+                <td class="text-light" th:text="${account.bankAccount.name}"></td>
+                <td class="text-light" th:text="${account.bankAccount.iban}"></td>
+                <td class="text-light" th:text="${#strings.listJoin(account.userAccounts, ', ')}"></td>
+                <td class="text-light"
+                    th:text="${(account.bankAccount.balance != null ? account.bankAccount.balance: 0) / 100.0} + ' €'"></td>
+                <td><a th:href="@{/accounts/{id}/edit(id=${account.bankAccount.id})}"
+                       class="btn btn-primary bg-transparent text-color-orange">Edit
+                </a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:if="${#lists.isEmpty(accounts)}" class="row justify-content-center">
+        <h4 class=" text-light bg-dark">There is no bank account to show.</h4>
+    </div>
+</div>
+</body>
+</html>

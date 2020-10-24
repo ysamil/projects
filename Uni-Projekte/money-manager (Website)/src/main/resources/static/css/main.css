@@ -1,0 +1,68 @@
+body {
+    background-color: #1c1c1c;
+    color: #ffffff;
+}
+
+div.container {
+    margin-bottom: 2em;
+}
+
+a.icon-link {
+    margin-right: 1em;
+}
+
+a.icon-link:hover {
+    text-decoration: none;
+}
+
+.form-control.inputCustom {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%;
+}
+
+.navbar-brand {
+    padding: 0px;
+}
+
+.orange {
+    color: darkorange;
+}
+
+.btn-orange {
+    background-color: transparent;
+    color: darkorange;
+    border: 1px solid darkorange;
+}
+
+.btn-orange:hover {
+    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+}
+
+.new-btn-ui {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-color: #FF9443;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.leftRight-margin {
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.text-color-orange {
+    color: #FF9443 !important;
+}

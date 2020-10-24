@@ -1,0 +1,46 @@
+stages:
+  - build-gradle
+  - test-gradle
+  - build-docker
+
+build-gradle:
+  stage: build-gradle
+  image: openjdk:14.0.2-jdk
+
+  only:
+    - master
+    - merge_requests
+
+  script:
+    - ./gradlew assemble
+    - mkdir -p target
+    - mv build/libs/money-manager-0.0.1-SNAPSHOT.jar target/app.jar
+
+  artifacts:
+    paths:
+      - target/app.jar
+
+test-gradle:
+  stage: test-gradle
+  image: openjdk:14.0.2-jdk
+
+  only:
+    - master
+    - merge_requests
+
+  script:
+    - ./gradlew test
+
+build-docker:
+  stage: build-docker
+  image: docker
+
+  only:
+    - master
+
+  script:
+    - docker info
+    - docker build -t money-manager .
+    - docker stop money-manager-container || true
+    - docker rm money-manager-container || true
+    - docker run -d -p 8080:8080 --name money-manager-container money-manager

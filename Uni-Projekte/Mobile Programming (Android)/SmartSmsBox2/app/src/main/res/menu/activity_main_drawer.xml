@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/Personal"
+            android:icon="@android:drawable/ic_dialog_email"
+            android:title="Personal" />
+        <item
+            android:id="@+id/Commercial"
+            android:icon="@android:drawable/ic_input_get"
+            android:title="Commercial" />
+        <item
+            android:id="@+id/Spam"
+            android:icon="@android:drawable/ic_notification_clear_all"
+            android:title="Spam" />
+        <item
+            android:id="@+id/OTP"
+            android:icon="@android:drawable/ic_dialog_info"
+            android:title="OTP" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Send" />
+        </menu>
+    </item>
+
+</menu>

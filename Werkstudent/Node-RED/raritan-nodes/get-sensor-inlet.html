@@ -1,0 +1,106 @@
+<script type="text/javascript">
+    RED.nodes.registerType('sensor-inlet',{
+        category: 'Raritan Nodes',
+        color: '#a6bbcf',
+        defaults: {
+            name: {value:""},
+            url: {value:"" , type:"config-node"},
+            inletNo: {value:""},
+            sensors: {value:""}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "file.png",
+        label: function() {
+            if(this.name)
+                return this.name;
+            else 
+                return "sensor-inlet";
+        },
+        oneditsave: function() {
+            var node = this;
+        },
+        oneditprepare:function(){
+            let connectionResult = document.getElementById("connectionResult");
+            connectionResult.style.color = "red";
+            connectionResult.innerHTML = "<span>&#9888;</span> Please create an HTTP end-point with 'settings' node to use the settings...";
+            fetch("getInfo?sensorInlet=1&getInletNumber=1").then(ret => {
+                return ret.text();
+            }).then(text => {
+                document.getElementById("node-input-inletNo").max = parseInt(text);
+                connectionResult.innerHTML = "Settings' connection is successful."; 
+                connectionResult.style.color = "green";
+            }).catch(()=>{
+                connectionResult.innerHTML = "<span>&#9888;</span> Connection Failed... Please check your HTTP end-point connection settings.";
+            });
+        }
+    });
+    function inletSelected(inletNo) {
+        var dropDown = document.getElementById('node-input-sensors');
+        dropDown.innerHTML='<option disabled="disabled" selected="selected" value=""> -- select a sensor -- </option>';
+        console.log(inletNo);
+        fetch("getInfo?sensorInlet=1&getInletSensor=1&inletNo=" + inletNo).then(ret => {
+            return ret.json();
+        }).then(json => {
+            for (var i = 0; i < json.length; i++) {
+                var option = document.createElement("OPTION");
+                option.innerHTML = json[i];
+                option.value = json[i];
+                dropDown.options.add(option);
+            }
+        }).catch(()=>{
+            connectionResult.style.color = "red";
+            connectionResult.innerHTML = "<span>&#9888;</span> Connection Failed... Please check your HTTP end-point connection settings.";
+        });
+    }
+</script>
+
+<script type="text/x-red" data-template-name="sensor-inlet">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-url"><i class="icon-tag"></i> Url</label>
+        <input type="text" id="node-input-url">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-inletNo"><i class="fa fa-tasks"> Inlet</i></label>
+        <input type="number" id="node-input-inletNo"  onchange="inletSelected(this.value)" name="quantity" min="1" max="1">
+        </select>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-sensors"><i class="fa fa-tasks"></i> sensors</label>
+        <select type="text" id="node-input-sensors" style="width:70%;">
+            <option disabled="disabled" selected="selected" value=""> -- select a sensor -- </option>
+        </select>
+    </div>
+
+    <div class="form-row">
+        <h5 id="connectionResult"></h5>
+    </div>
+</script>
+
+
+<script type="text/x-red" data-help-name="sensor-inlet">
+    <p>Get the sensor values of the requested inlet.</p>
+    
+     <h3>Outputs</h3>
+         <ol class="node-ports">
+             <li>Standard output
+                 <dl class="message-properties">
+                     <dt>payload <span class="property-type">string</span></dt>
+                     <dd>the value of the selected sensor.</dd>
+                 </dl>
+             </li>
+         </ol>
+    
+    <h3>Details</h3>
+        <p>The inlet number and the sensor could be selected from the settings of the node. 
+            Server connection settings have to be given by configuring the "Url" settings.</p>
+</script>
+    
+

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <title>Create User - Money Manager</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="/static/img/logo.png" th:href="@{/static/img/logo.png}"/>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" th:href="@{/static/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="/static/css/fontawsome-all.min.css" th:href="@{/static/css/fontawsome-all.min.css}"/>
+    <link rel="stylesheet" href="/static/css/main.css" th:href="@{/static/css/main.css}"/>
+    <script type="application/javascript" src="/static/js/bootstrap.min.js"
+            th:src="@{/static/js/bootstrap.min.js}"></script>
+</head>
+
+<body>
+<div th:replace="navbar :: navbar"></div>
+<div class="container h-100 d-flex justify-content-center">
+    <div class="jumbotron my-auto bg-dark text-white">
+        <h2>Game settings</h2>
+        <form action="/game" method="post" class="text-left">
+            <div class="form-group">
+                <label for="bankName">Bank name:</label>
+                <input th:value="${bank.bankName}" type="text" class="form-control" id="bankName" name="bankName">
+            </div>
+            <div class="form-group">
+                <label for="accountFees">Account fees:</label>
+                <div class="input-group">
+                    <input th:with="accountFee=${bank.accountFees / 100.0}" th:value="${accountFee}" type="number"
+                           step="0.01" class="form-control" id="accountFees" name="accountFees">
+                    <div class="input-group-append">
+                        <span class="input-group-text">€</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="creditInterest">Credit interest:</label>
+                <div class="input-group">
+                    <input th:value="${bank.creditInterest}" type="number" step="0.01" class="form-control"
+                           id="creditInterest" name="creditInterest">
+                    <div class="input-group-append">
+                        <span class="input-group-text">%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="debitInterest">Debit interest:</label>
+                <div class="input-group">
+                    <input th:value="${bank.debitInterest}" type="number" step="0.01" class="form-control"
+                           id="debitInterest" name="debitInterest">
+                    <div class="input-group-append">
+                        <span class="input-group-text">%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="startBalance">Start balance:</label>
+                <div class="input-group">
+                    <input th:with="startBalance=${bank.startBalance / 100.0}" th:value="${startBalance}" type="number"
+                           class="form-control" id="startBalance" name="startBalance" step="0.01">
+                    <div class="input-group-append">
+                        <span class="input-group-text">€</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="overdraft">Overdraft:</label>
+                <div class="input-group">
+                    <input th:with="dispo=${bank.dispo / 100.0}" th:value="${dispo}" type="number" step="0.01"
+                           class="form-control" id="overdraft" name="overdraft">
+                    <div class="input-group-append">
+                        <span class="input-group-text">€</span>
+                    </div>
+                </div>
+            </div>
+
+            <p class="mb-0">Interest Calculation</p>
+            <div class="form-group">
+                <label for="startTime">Start time:</label>
+                <input type="time" id="startTime" name="startTime" class="form-control"
+                       th:value="${bank.getFormattedFirstInterval()}">
+            </div>
+            <p class="mb-0">Interval:</p>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="intervalHour">Hours:</label>
+                    <input type="number" id="intervalHour" min=0 name="intervalHour" class="form-control"
+                           th:value="${bank.getTimeInterval() / 1000/60/60}">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="intervalMin">Minutes:</label>
+                    <input type="number" id="intervalMin" min=0 max=59 name="intervalMin" class="form-control"
+                           th:value="${(bank.getTimeInterval() / 1000/60) % 60}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" th:checked="${bank.bill}" id="createBills"
+                           name="createBills">
+                    <label class="form-check-label" for="createBills">
+                        Create bills
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" th:checked="${bank.bankStatement}"
+                           id="createStatements" name="createStatements">
+                    <label class="form-check-label" for="createStatements">
+                        Create Account Statements
+                    </label>
+                </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Save</button>
+            <a href="/game?end=true" class="btn btn-danger">End game</a>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <title>Users - Money Manager</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="/static/img/logo.png" th:href="@{/static/img/logo.png}"/>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" th:href="@{/static/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="/static/css/fontawsome-all.min.css" th:href="@{/static/css/fontawsome-all.min.css}"/>
+    <link rel="stylesheet" href="/static/css/main.css" th:href="@{/static/css/main.css}"/>
+    <script type="application/javascript" src="/static/js/bootstrap.min.js"
+            th:src="@{/static/js/bootstrap.min.js}"></script>
+</head>
+
+<body>
+<div th:replace="navbar :: navbar"></div>
+<div class="container">
+    <h2 class="text-center text-light " th:text="${user.name}"></h2>
+    <div class="container text-center">
+        <p th:text="'UserID: ' + ${user.id}"></p>
+        <p th:text="'Email: ' + ${user.email}"></p>
+        <p th:text="'Reset password: ' + ${user.resetPassword == null ? '/' : user.resetPassword}"></p>
+        <p th:text="'Bank account: ' + ${user.bankAccount == null ? '/' : user.bankAccount.name + ' (' + user.bankAccount.iban + ')'}"></p>
+        <p th:text="'Role: ' + ${user.isAdmin  ? 'Administrator' : 'User'}"></p>
+        <p th:text="'Status: ' + ${user.getEnable() ? 'Active' : 'Disabled'}"></p>
+        <div class="btn-group mr-2" role="group" aria-label="First group">
+            <form method="post" th:action="@{makeAdmin}" class="float-left">
+                <input type="hidden" th:value="${userid}" name="userid">
+                <input value="Make admin" type="submit"
+                       class="btn btn-primary bg-transparent new-btn-ui text-color-orange">
+            </form>
+        </div>
+        <div th:if="${user.enable}" class="btn-group mr-2" role="group" aria-label="First group">
+            <form method="post" th:action="@{disable}" class="float-right">
+                <input type="hidden" th:value="${userid}" name="userid">
+                <input value="Disable" type="submit" class="btn btn-primary btn-danger">
+            </form>
+        </div>
+        <div th:if="${!user.enable}" class="btn-group mr-2" role="group" aria-label="First group">
+            <form method="post" th:action="@{enable}" class="float-right">
+                <input type="hidden" th:value="${userid}" name="userid">
+                <input value="Enable" type="submit" class="btn btn-primary btn-success">
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

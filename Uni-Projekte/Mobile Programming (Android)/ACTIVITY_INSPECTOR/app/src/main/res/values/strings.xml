@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ACTIVITY_INSPECTOR</string>
+    <string name="list">List Activities</string>
+    <string name="status">state</string>
+    <string name="save">Save Activities</string>
+    <string name="delete">Delete Activities</string>
+</resources>

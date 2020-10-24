@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">SmartSmsBox</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="sendMessage">Send</string>
+    <string name="hint_msg">Type your message</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="add_delete_blacklist">Add/Delete Blacklist</string>
+    <string name="add_delete">Add to blacklist</string>
+    <string name="number">Number</string>
+    <string name="delete">Delete from Blacklist</string>
+    <string name="show_all_sms_in_the_map">Show all sms in the map</string>
+</resources>

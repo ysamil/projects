@@ -1,0 +1,123 @@
+<script type="text/javascript">
+    RED.nodes.registerType('sensor-peripheral',{
+        category: 'Raritan Nodes',
+        color: '#a6bbcf',
+        defaults: {
+            name: {value:""},
+            url: {value:"", type:'config-node'},
+            deviceNo: {value:""},
+            state: {value:""}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "file.png",
+        label: function() {
+            if(this.name)
+                return this.name;
+            else 
+                return "sensor-peripheral";
+        },
+        oneditsave: function() {
+            var node = this;
+            $("#node-input-deviceNo").val($("#node-input-deviceNo").val());
+        },
+        oneditprepare:function(){
+            let connectionResult = document.getElementById("connectionResult");
+            connectionResult.style.color = "red";
+            connectionResult.innerHTML = "<span>&#9888;</span> Please create an HTTP end-point with 'settings' node to use the settings...";
+            fetch("getInfo?sensorPeripheral=1&getPeripheralNumber=1").then(ret => {
+                return ret.text();
+            }).then(text => {
+                document.getElementById("node-input-deviceNo").max = parseInt(text);
+                connectionResult.innerHTML = "Settings' connection is successful."; 
+                connectionResult.style.color = "green";
+            }).catch(()=>{
+                connectionResult.innerHTML = "<span>&#9888;</span> Connection Failed... Please check your HTTP end-point connection settings.";
+            });
+        }
+    });
+
+    function deviceSelected(deviceNo) {
+        let state = document.getElementById('node-input-state');
+        state.disabled = true;
+        fetch("getInfo?sensorPeripheral=1&isActuator=1&deviceNo=" + deviceNo).then(ret => {
+            return ret.text();
+        }).then(text => {
+            if(text == "true"){
+                state.disabled = false; 
+            }
+        }).catch(()=>{
+            connectionResult.style.color = "red";
+            connectionResult.innerHTML = "<span>&#9888;</span> Connection Failed... Please check your HTTP end-point connection settings.";
+        });
+    }
+</script>
+
+<script type="text/x-red" data-template-name="sensor-peripheral">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-url"><i class="icon-tag"></i> Url</label>
+        <input type="text" id="node-input-url">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-deviceNo"><i class="fa fa-tasks"> Device No</i></label>
+        <input type="number" id="node-input-deviceNo" onchange="deviceSelected(this.value)" name="quantity" min="1" max="1">
+        </select>
+    </div>
+
+    <div class="form-row" id="state">
+        <label for="node-input-state"><i class="fa fa-tasks"></i> State</label>
+        <select type="text" id="node-input-state" style="width:70%;">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        </select>
+    </div>
+
+    <div class="form-row">
+        <h5 id="connectionResult" style="color:red"></h5>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="sensor-peripheral">
+    <p>Get the sensor values of the selected peripheral device and also set the state, if it is an actuator.</p>
+    
+     <h3>Outputs</h3>
+         <ol class="node-ports">
+             <li>
+                 <dl class="message-properties">
+                     <dt>serial<span class="property-type">string</span></dt>
+                     <dd>the serial number of the requested device.</dd>
+                 </dl>
+             </li>
+             <li>
+                    <dl class="message-properties">
+                        <dt>readingType <span class="property-type">string</span></dt>
+                        <dd>It shows the reading type of device. If the sensor has a reading value such as temperature, humidity, e.g., 
+                                it's value will be "0", otherwise will be "1".</dd>
+                    </dl>
+            </li>
+            <li>
+                    <dl class="message-properties">
+                        <dt>value <span class="property-type">string</span></dt>
+                        <dd>If the sensor has a readable value such as temperature, humidity, e.g., it will show it. Otherwise, it will be "0".</dd>
+                    </dl>
+            </li>
+            <li>
+                    <dl class="message-properties">
+                        <dt>isActuator <span class="property-type">string</span></dt>
+                        <dd>If the device is an actuator the value will be true, otherwise false.</dd>
+                    </dl>
+            </li>
+         </ol>
+    
+    <h3>Details</h3>
+        <p>The peripheral device number could be selected from the settings of the node. Also, the state of the device may be 
+            selected, if the device is an actuator. Server connection settings have to be given by configuring the "Url" settings.
+            <b>To see the output correctly with the "debug" node, choose the "complete msg object" as output from settings.</b>
+        </p>
+</script>

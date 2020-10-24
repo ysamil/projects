@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<nav class="navbar navbar-expand-lg navbar-dark" th:fragment="navbar">
+    <a class="navbar-brand" href="/" th:href="@{/}">
+        <img src="/static/img/logo_text.png" th:src="@{/static/img/logo_text.png}" height="30" alt="Money Manager">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbar">
+        <div class="navbar-nav">
+            <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                <a class="nav-item nav-link text-color-orange" href="/game">Game Settings</a>
+                <a class="nav-item nav-link text-color-orange" href="/users">User
+                    Accounts</a>
+                <a class="nav-item nav-link text-color-orange" href="/accounts">Bank
+                    Accounts</a>
+                <a class="nav-item nav-link text-color-orange" href="/settings">Settings</a>
+            </th:block>
+            <th:block sec:authorize="hasRole('ROLE_USER')">
+                <a class="nav-item nav-link text-color-orange" href="/transactions">Banking</a>
+                <a class="nav-item nav-link text-color-orange" href="/inbox">Inbox</a>
+                <a class="nav-item nav-link text-color-orange" href="/settings">Settings</a>
+            </th:block>
+            <a class="nav-item nav-link text-color-orange" href="/logout" th:href="@{/logout}">Logout</a>
+        </div>
+    </div>
+</nav>
+
+</html>

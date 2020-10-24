@@ -1,0 +1,117 @@
+<script type="text/javascript">
+    RED.nodes.registerType('sensor-outlet',{
+        category: 'Raritan Nodes',
+        color: '#a6bbcf',
+        defaults: {
+            name: {value:""},
+            url: {value:"", type:'config-node'},
+            outletNo: {value:""},
+            sensors: {value:"voltage"}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "file.png",
+        label: function() {
+            if(this.name)
+                return this.name;
+            else 
+                return "sensor-outlet";
+        },
+        oneditsave: function() {
+            $("#node-input-state").val($("#node-input-state").val());
+            $("#node-input-outletNo").val($("#node-input-outletNo").val());
+            $("#node-input-sensors").val($("#node-input-sensors").val());
+        },
+        oneditprepare:function(){
+            let connectionResult = document.getElementById("connectionResult");
+            connectionResult.style.color = "red";
+            connectionResult.innerHTML = "<span>&#9888;</span> Please create an HTTP end-point with 'settings' node to use the settings...";
+            fetch("getInfo?sensorOutlet=1&getOutletNumber=1").then(ret => { 
+                console.log(ret.status);
+                if(ret.ok)
+                    return ret.text();
+                else 
+                    throw Error(ret.status);
+            }).then(text => {
+                document.getElementById("node-input-outletNo").max = parseInt(text);
+                connectionResult.innerHTML = "Settings' connection is successful."; 
+                connectionResult.style.color = "green";
+            }).catch(error=>{
+                connectionResult.innerHTML = "<span>&#9888;</span> Connection Failed... Please check your HTTP end-point connection settings.";
+                console.log(error);
+            });
+            document.getElementById("node-input-outletNo").value=1;
+        }
+    });
+    function outletSelected(outletNo) {
+        var dropDown = document.getElementById('node-input-sensors');
+        dropDown.innerHTML='<option disabled="disabled" value=""> -- select a sensor -- </option>';
+        fetch("getInfo?sensorOutlet=1&getOutletSensor=1&outletNo=" + outletNo).then(ret => {
+            if(ret.ok)
+                return ret.json();
+            else 
+                throw Error(ret.status);
+        }).then(json => {
+            for (var i = 0; i < json.length; i++) {
+                var option = document.createElement("OPTION");
+                option.innerHTML = json[i];
+                option.value = json[i];
+                dropDown.options.add(option);
+            }
+        }).catch(error=>{
+            connectionResult.style.color = "red";
+            connectionResult.innerHTML = "<span>&#9888;</span> Connection Failed... Please check your HTTP end-point connection settings.";
+            console.log(error);
+        });
+    }
+</script>
+
+<script type="text/x-red" data-template-name="sensor-outlet">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-url"><i class="icon-tag"></i> Url</label>
+        <input type="text" id="node-input-url">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-outletNo"><i class="fa fa-tasks"> Outlet</i></label>
+        <input type="number" id="node-input-outletNo"  onchange="outletSelected(this.value)" name="quantity" min="1" max="1">
+        </select>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-sensors"><i class="fa fa-tasks"></i> Sensors</label>
+        <select type="text" id="node-input-sensors" style="width:70%;">
+                <option disabled="disabled" selected="selected" value=""> -- select a sensor -- </option>
+        </select>
+    </div>
+
+    <div class="form-row">
+        <h5 id="connectionResult"></h5>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="sensor-outlet">
+    <p>Get the sensor values of the requested outlet.</p>
+    
+     <h3>Outputs</h3>
+         <ol class="node-ports">
+             <li>Standard output
+                 <dl class="message-properties">
+                     <dt>payload <span class="property-type">string</span></dt>
+                     <dd>the value of the selected sensor.</dd>
+                 </dl>
+             </li>
+         </ol>
+    
+    <h3>Details</h3>
+        <p>The outlet number and the sensor could be selected from the settings of the node. 
+            Server connection settings have to be given by configuring the "Url" settings.</p>
+</script>
+    
+
+

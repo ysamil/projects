@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+  monery-manager:
+    build: .
+    image: money-manager
+    volumes:
+      - "./data:/money-manager"
+    ports:
+      - 80:8080

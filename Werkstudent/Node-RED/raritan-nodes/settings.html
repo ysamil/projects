@@ -1,0 +1,49 @@
+<script type="text/javascript">
+    RED.nodes.registerType('settings',{
+        category: 'Raritan Nodes',
+        color: '#a6bbcf',
+        defaults: {
+            name: {value:""},
+            url: {value:"", type:'config-node'},
+        },
+        inputs:1,
+        outputs:1,
+        icon: "file.png",
+        label: function() {
+            if(this.name)
+                return this.name;
+            else 
+                return "settings";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="settings">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-url"><i class="icon-tag"></i> Url</label>
+        <input type="text" id="node-input-url">
+    </div>
+
+</script>
+
+<script type="text/x-red" data-help-name="settings">
+    <p>This node provides the required information for the settings of other Raritan nodes.</p>
+
+    <h3>Creating an HTTP end-point</h3>
+        <p>-Find the "http" and "http response" node from the palette and add them into the flow. Connect this node and the other
+            two nodes each other in this order:<br/>
+            <b>|http| --> |settings| --> |http response|</b> <br/>
+            -Open the settings of "http" node. Select "GET" for method and give "/getInfo" for URL. <br/>
+            -Then configure the "settings" node. 
+        </p>
+    <h3>Details</h3>
+        <p>In the node settings, there is information which has to be up to date. For example, the outlet number in the "sensor outlet"
+            node should receive from the server. This node provides all required settings information for the other Raritan nodes.
+        </p>
+</script>
+
