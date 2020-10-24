@@ -1,4 +1,3 @@
-# README
 Ich teile hier die Projekte, an denen ich während meiner Tätigkeit gearbeitet habe.Aus Datenschutzgründen darf ich nur bestimmte Projekte auf GitHub hochladen. 
 
 # Projekte
